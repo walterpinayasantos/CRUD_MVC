@@ -8,17 +8,16 @@ function init() {
 
 $(document).ready(function () {
   // Usamos la variable 'tabla' que declaraste arriba del archivo
-  tabla = $("#producto_data").DataTable({
-    // --- Configuraciones Modernas (v2.0+) ---
-    processing: true, // Antes aProcessing
-    serverSide: true, // Antes aServerSide
-    destroy: true, // Antes bDestroy
+  var tabla = $("#producto_data").DataTable({
+    // --- Configuración Core ---
+    processing: true,
+    serverSide: false,
     responsive: true,
-    info: true, // Antes bInfo
-    pageLength: 10, // Antes iDisplayLength
-    order: [[0, "asc"]], // Ordenar por la primera columna ascendente
+    destroy: true,
+    pageLength: 10,
+    order: [[0, "asc"]],
 
-    // --- Botones ---
+    // --- Botones y Diseño ---
     dom: "Bfrtip",
     buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf"],
 
@@ -27,32 +26,12 @@ $(document).ready(function () {
       url: "../../controller/productos.php?op=listar",
       type: "get",
       dataType: "json",
-      error: function (e) {
-        console.log("Error en el servidor: ", e.responseText);
-      },
+      error: (e) => console.error("Error servidor: ", e.responseText),
     },
 
-    // --- Traducción (v2.0 Style) ---
+    // --- Traducción Simplificada ---
     language: {
-      processing: "Procesando...",
-      lengthMenu: "Mostrar _MENU_ registros",
-      zeroRecords: "No se encontraron resultados",
-      emptyTable: "Ningún dato disponible en esta tabla",
-      info: "Mostrando un total de _TOTAL_ registros",
-      infoEmpty: "Mostrando un total de 0 registros",
-      infoFiltered: "(filtrado de un total de _MAX_ registros)",
-      search: "Buscar:",
-      loadingRecords: "Cargando...",
-      paginate: {
-        first: "Primero",
-        last: "Último",
-        next: "Siguiente",
-        previous: "Anterior",
-      },
-      aria: {
-        sortAscending: ": Activar para ordenar de manera ascendente",
-        sortDescending: ": Activar para ordenar de manera descendente",
-      },
+      url: "https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-ES.json",
     },
   });
 });

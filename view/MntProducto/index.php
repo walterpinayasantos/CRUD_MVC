@@ -14,6 +14,8 @@
     <!-- App favicon -->
     <link rel="shortcut icon" href="../../public/assets/images/favicon.ico">
 
+    <!-- Sweet Alert css-->
+    <link href="../../public/assets/vendor/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 
     <link rel="stylesheet" href="../../public/assets/vendor/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
 
@@ -542,6 +544,12 @@
                                 <p class="card-subtitle">
                                     Desde esta ventana podra dar mantenimiento a los productos...
                                 </p>
+
+                                <div>
+                                    <div class="d-flex flex-wrap align-items-center gap-2">
+                                        <button id="btnnuevo" class="btn btn-primary waves-effect waves-light">Nuevo Registro</button>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="card-body pt-2">
@@ -711,12 +719,15 @@
         </div>
 
     </div>
-
+    <?php require_once("modalmantenimiento.php"); ?>
     <!-- Vendor js -->
     <script src="../../public/assets/js/vendor.min.js"></script>
 
     <!-- App js -->
     <script src="../../public/assets/js/app.js"></script>
+
+    <!-- Sweet Alerts js -->
+    <script src="../../public/assets/vendor/sweetalert2/sweetalert2.min.js"></script>
 
     <script src="../../public/assets/vendor/datatables.net/js/dataTables.min.js"></script>
     <script src="../../public/assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>

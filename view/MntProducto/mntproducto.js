@@ -65,28 +65,80 @@ function editar(prod_id) {
   $("#modalmantenimiento").modal("show");
 }
 
+// 1. Definimos la configuración global de los Toasts (Notificaciones de esquina)
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 2000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    // Pausa el tiempo si el usuario pone el mouse encima
+    toast.onmouseenter = Swal.stopTimer;
+    // Reanuda si quita el mouse
+    toast.onmouseleave = Swal.resumeTimer;
+  },
+});
+
+// 2. Función eliminar con confirmación central y éxito tipo Toast
 function eliminar(prod_id) {
-  swal
-    .fire({
-      title: "CRUD",
-      text: "Desea Eliminar el Registro?",
-      icon: "error",
-      showCancelButton: true,
-      confirmButtonText: "Si",
-      cancelButtonText: "No",
-      reverseButtons: true,
-    })
-    .then((result) => {
-      if (result.isConfirmed) {
-        $.post("../../controller/productos.php?op=eliminar", { prod_id: prod_id }, function (data) {});
+  Swal.fire({
+    title: "¿Está seguro?",
+    text: "¡No podrá revertir esta acción!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sí, eliminarlo",
+    cancelButtonText: "Cancelar",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Petición AJAX al controlador
+      $.post("../../controller/productos.php?op=eliminar", { prod_id: prod_id }, function (data) {
+        // Recarga la tabla manteniendo la posición de la página
+        $("#producto_data").DataTable().ajax.reload(null, false);
 
-        $("#producto_data").DataTable().ajax.reload();
-
-        swal.fire("Eliminado!", "El registro se elimino correctamente.", "success");
-      }
-    });
+        // Notificación profesional de esquina
+        Toast.fire({
+          icon: "success",
+          title: "Producto eliminado correctamente",
+        });
+      });
+    }
+  });
 }
-
+/*
+function eliminar(prod_id) {
+  Swal.fire({
+    title: "¿Está seguro?",
+    text: "¡No podrá revertir esta acción!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sí",
+    cancelButtonText: "No",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Enviamos la petición al controlador
+      $.post("../../controller/productos.php?op=eliminar", { prod_id: prod_id }, function (data) {
+        // Recargamos la tabla DataTable una vez confirmada la eliminación en BD
+        $("#producto_data").DataTable().ajax.reload();
+        // Mostramos el mensaje de éxito
+        // --- Alerta con auto-cierre ---
+        Swal.fire({
+          title: "¡Eliminado!",
+          text: "El registro ha sido eliminado correctamente.",
+          icon: "success",
+          showConfirmButton: false, // Oculta el botón OK
+          timer: 1000, // Tiempo en milisegundos (2 segundos)
+          timerProgressBar: true, // Opcional: muestra una barra de tiempo
+        });
+      });
+    }
+  });
+}
+*/
 $(document).on("click", "#btnnuevo", function () {
   $("#prod_id").val("");
   $("#mdltitulo").html("Nuevo Registro");

@@ -39,6 +39,7 @@ $(document).ready(function () {
 function guardaryeditar(e) {
   e.preventDefault();
   var formData = new FormData($("#producto_form")[0]);
+
   $.ajax({
     url: "../../controller/productos.php?op=guardaryeditar",
     type: "POST",
@@ -46,23 +47,47 @@ function guardaryeditar(e) {
     contentType: false,
     processData: false,
     success: function (datos) {
+      // 1. Limpiamos el formulario y el ID oculto
       $("#producto_form")[0].reset();
-      $("#modalmantenimiento").modal("hide");
-      $("#producto_data").DataTable().ajax.reload();
+      $("#prod_id").val(""); // Muy importante para que el próximo registro no se cruce
 
-      swal.fire("Registro!", "El registro correctamente.", "success");
+      // 2. Cerramos el modal
+      $("#modalmantenimiento").modal("hide");
+
+      // 3. Recargamos la tabla (false para mantener la página actual)
+      $("#producto_data").DataTable().ajax.reload(null, false);
+
+      // 4. Usamos el Toast elegante que definimos antes
+      Toast.fire({
+        icon: "success",
+        title: "Registro procesado correctamente",
+      });
+    },
+    error: function (e) {
+      // En caso de error, lanzamos un Toast de error
+      Toast.fire({
+        icon: "error",
+        title: "Error al guardar los datos",
+      });
+      console.log(e.responseText);
     },
   });
 }
 
 function editar(prod_id) {
-  $.post("../../controller/productos.php?op=mostrar", { prod_id: prod_id }, function (data) {
-    data = JSON.parse(data);
-    $("#prod_id").val(data.prod_id);
-    $("#prod_nom").val(data.prod_nom);
-  });
   $("#mdltitulo").html("Editar Registro");
-  $("#modalmantenimiento").modal("show");
+  // Usamos .post indicando que esperamos un 'json' al final
+  $.post(
+    "../../controller/productos.php?op=mostrar",
+    { prod_id: prod_id },
+    function (data) {
+      $("#prod_id").val(data.prod_id);
+      $("#prod_nombre").val(data.prod_nombre);
+      $("#prod_desc").val(data.prod_desc);
+      $("#modalmantenimiento").modal("show");
+    },
+    "json"
+  ); // <--- Este parámetro asegura que jQuery parsee el JSON automáticamente
 }
 
 // 1. Definimos la configuración global de los Toasts (Notificaciones de esquina)

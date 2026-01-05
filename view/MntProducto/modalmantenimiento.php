@@ -14,6 +14,10 @@
                         <label for="prod_nombre">Nombre</label>
                         <input type="email" class="form-control" id="prod_nombre" name="prod_nombre" placeholder="Ingrese nombre" required>
                     </div>
+                    <div class="form-group">
+                        <label for="prod_desc">Descripcion</label>
+                        <textarea class="form-control" id="prod_desc" name="prod_desc" rows="3" placeholder="Ingrese descripcion" required></textarea>
+                    </div>
                 </form>
             </div>
 
